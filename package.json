@@ -1,19 +1,31 @@
 {
-  "name": "ng-sdms-template-fe",
-  "version": "1.0.0",
-  "description": "",
+  "name": "create-ng-sdms-app",
+  "version": "0.1.0",
+  "description": "NG SDMS Template Generator",
   "main": "cli-create-project.js",
+  "bin": {
+    "create-ng-sdms-app": "create-ng-sdms-app.js"
+  },
   "scripts": {
-    "init": "node cli-create-project"
+    "create": "node create-ng-sdms-app"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://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@github.com/mpmlicense/ng-sdms-template-fe.git"
+    "url": "git+https://github.com/mpmlicense/ng-sdms-template-fe.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
+  "dependencies": {
+    "boxen": "^7.1.1",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "figlet": "^1.8.1",
+    "gradient-string": "^2.0.2",
+    "inquirer": "^9.3.7",
+    "ora": "^7.0.1"
+  },
   "bugs": {
     "url": "https://github.com/mpmlicense/ng-sdms-template-fe/issues"
   },

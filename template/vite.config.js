@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
 import { getGitCommitHash } from './src/lib/gitRev'
+import { federation } from '@module-federation/vite'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -17,9 +18,21 @@ export default defineConfig(({ mode }) => {
     },
     base: env.VITE_BASE_URL_APP || '/',
     server: {
-      port: 3000,
+      port: '{{DOMAIN_PORT}}'
     },
-    plugins: [vue(), vueDevTools(), tailwindcss()],
+    plugins: [
+      vue(),
+      vueDevTools(),
+      tailwindcss(),
+      federation({
+        name: '{{DOMAIN_NAME}}',
+        filename: 'remoteEntry.js',
+        exposes: {
+          './entry': './src/entry.js',
+        },
+        shared: ['vue'],
+      }),
+    ],
     esbuild: {
       drop: ['console'],
     },
@@ -28,8 +41,13 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
     build: {
-      // Ensure proper IIS deployment
+      target: 'esnext',
       outDir: 'dist',
       assetsDir: 'assets',
       rollupOptions: {
