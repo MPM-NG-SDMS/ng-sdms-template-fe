@@ -307,6 +307,18 @@ async function createProject(options) {
     await new Promise(resolve => setTimeout(resolve, 1000)); // For visual effect
     await asyncCopyRecursive(templateDir, targetDir);
     spinner.succeed(chalk.green('Template files copied successfully'));
+
+    // Rename gitignore to .gitignore if present
+    const gitignorePath = path.join(targetDir, 'gitignore');
+    const dotGitignorePath = path.join(targetDir, '.gitignore');
+    try {
+      if (fs.existsSync(gitignorePath)) {
+        await fs.promises.rename(gitignorePath, dotGitignorePath);
+        console.log(chalk.green('Renamed gitignore to .gitignore'));
+      }
+    } catch (err) {
+      console.warn(chalk.yellow(`Warning: Could not rename gitignore: ${err.message}`));
+    }
     
     // Replace placeholders in all files with spinner
     spinner = ora('Configuring project files...').start();
