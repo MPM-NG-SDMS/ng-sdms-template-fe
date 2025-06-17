@@ -1,6 +1,6 @@
 {
   "name": "create-ng-sdms-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "NG SDMS Template Generator",
   "main": "cli-create-project.js",
   "bin": {

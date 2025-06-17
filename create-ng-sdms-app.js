@@ -382,8 +382,10 @@ async function createProject(options) {
 
 // Helper to run shell commands asynchronously
 function asyncExec(command, options = {}) {
+  // Set a larger buffer for commands that may output a lot
+  const execOptions = { maxBuffer: 10 * 1024 * 1024, ...options };
   return new Promise((resolve, reject) => {
-    exec(command, options, (error, stdout, stderr) => {
+    exec(command, execOptions, (error, stdout, stderr) => {
       if (error) {
         reject(error);
       } else {
