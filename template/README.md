@@ -57,16 +57,20 @@ This template uses [vue-i18n](https://vue-i18n.intlify.dev/) for internationaliz
 
 ### Setup
 
-- Locale files are located in `src/locales/` (e.g., `en.json`, `id.json`).
+- Locale files are located in `/locales/` (e.g., `en.json`, `id.json`).
 - The i18n configuration is in `src/lib/i18n.js`.
 - The current locale is set using `localStorage` and can be changed at runtime.
 
 ### Usage
 
-- Use the `$t` function in your components to access translations:
+- Use the `t` function in your components to access translations:
   ```vue
+  <script setup>
+    import { useI18n } from 'vue-i18n';
+    const { t } = useI18n();
+  </script>
   <template>
-    <h1>{{ $t('listTitle') }}</h1>
+    <h1>{{ t('listTitle') }}</h1>
   </template>
   ```
 - To change the language, update `localStorage.setItem('locale', value)` and reload or use the provided watcher.
