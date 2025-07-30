@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { PhArrowLeft, PhCaretDown, PhCheckCircle, PhEye, PhPencilSimple, PhPlus, PhSliders, PhSlidersHorizontal, PhTrash, PhXCircle } from '@phosphor-icons/vue';
@@ -33,17 +34,18 @@ import CardContent from '@/components/ui/card/CardContent.vue';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Checkbox } from '@/components/ui/checkbox';
 
-const filterTabs = [
-  { id: 'all', label: 'All' },
-  { id: 'active', label: 'Active' },
-  { id: 'Passive', label: 'Passive' }
-];
+const { t } = useI18n();
+const filterTabs = computed(() => [
+  { id: 'all', label: t('filterTabs.all') },
+  { id: 'active', label: t('filterTabs.active') },
+  { id: 'passive', label: t('filterTabs.passive') }
+]);
 
-const dateRangeOptions = [
-  { id: 'last7', label: 'Last 7 Days' },
-  { id: 'last30', label: 'Last 30 Days' },
-  { id: 'last90', label: 'Last 90 Days' }
-];
+const dateRangeOptions = computed(() => [
+  { id: 'last7', label: t('filterDate.7days') },
+  { id: 'last30', label: t('filterDate.30days') },
+  { id: 'last90', label: t('filterDate.90days') }
+]);
 
 const currentTab = ref('all');
 const selectedDateRange = ref('last7');
@@ -54,12 +56,11 @@ const filterState = ref({
   dateRange: undefined
 });
 
-const statusOptions = [
-  { id: 'all', label: 'All' },
-  { id: 'active', label: 'Active' },
-  { id: 'passive', label: 'Passive' },
-  { id: 'status2', label: 'Status' }
-];
+const statusOptions = computed(() => [
+  { id: 'all', label: t('filterTabs.all') },
+  { id: 'active', label: t('filterTabs.active') },
+  { id: 'passive', label: t('filterTabs.passive') }
+]);
 
 const customers = ref([
   {
@@ -139,9 +140,9 @@ const applyFilter = () => {
       <!-- Header Section -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div class="flex flex-row sm:flex-row items-center sm:items-center gap-2">
-          <h1 class="text-lg sm:text-xl font-bold">Daftar Customer</h1>
+          <h1 class="text-lg sm:text-xl font-bold">{{ t('listTitle') }}</h1>
           <Button @click="$router.push('/create')">
-            <PhPlus weight="bold" /> Create
+            <PhPlus weight="bold" /> {{ t('createTitle') }}
           </Button>
         </div>
 
@@ -186,15 +187,15 @@ const applyFilter = () => {
       <Dialog v-model:open="showAdvancedFilter">
         <DialogContent class="sm:max-w-[425px] w-[90vw]">
           <DialogHeader>
-            <DialogTitle>Filter</DialogTitle>
+            <DialogTitle>{{ t('filterTitle', 'Filter') }}</DialogTitle>
             <DialogDescription>
-              Filter transactions by status and date range
+              {{ t('filterDesc', 'Filter transactions by status and date range') }}
             </DialogDescription>
           </DialogHeader>
 
           <!-- Status Checkboxes -->
           <div class="mb-4">
-            <h3 class="text-sm font-medium mb-2">Status</h3>
+            <h3 class="text-sm font-medium mb-2">{{ t('filterTabs.status', 'Status') }}</h3>
             <div class="flex flex-wrap gap-2">
               <label
                 v-for="status in statusOptions"
@@ -217,13 +218,13 @@ const applyFilter = () => {
 
           <!-- Date Range -->
           <div class="mb-6">
-            <h3 class="text-sm font-medium mb-2">Pilih Range Tanggal</h3>
+            <h3 class="text-sm font-medium mb-2">{{ t('dateRange', 'Pilih Range Tanggal') }}</h3>
             <AppDateRangePicker v-model="filterState.dateRange" />
           </div>
 
           <DialogFooter class="flex flex-col sm:flex-row gap-2">
-            <Button variant="outline" @click="clearFilter" class="w-full sm:w-auto"><PhTrash /> Clear</Button>
-            <Button @click="applyFilter" class="w-full sm:w-auto"><PhSlidersHorizontal/> Filter</Button>
+            <Button variant="outline" @click="clearFilter" class="w-full sm:w-auto"><PhTrash /> {{ t('clear', 'Clear') }}</Button>
+            <Button @click="applyFilter" class="w-full sm:w-auto"><PhSlidersHorizontal/> {{ t('filter', 'Filter') }}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -232,15 +233,15 @@ const applyFilter = () => {
       <DxDataGrid :data-source="customers" :show-borders="true" :hover-state-enabled="true"
         :allow-column-reordering="true" :allow-column-resizing="true" :column-auto-width="true" :show-row-lines="true"
         :column-hiding-enabled="true">
-        <DxColumn data-field="actions" caption="Actions" width="120" :allow-filtering="false" :allow-sorting="false"
+        <DxColumn data-field="actions" :caption="t('actions', 'Actions')" width="120" :allow-filtering="false" :allow-sorting="false"
           cell-template="actionsTemplate" />
-        <DxColumn data-field="customerId" caption="Customer ID" :allow-filtering="true" :allow-sorting="true" />
-        <DxColumn data-field="phoneNumber" caption="Phone Number" :allow-filtering="true" :allow-sorting="true" />
-        <DxColumn data-field="customerName" caption="Nama Customer" :allow-filtering="true" :allow-sorting="true" />
-        <DxColumn data-field="personalNumber" caption="Personal Number" :allow-filtering="true" :allow-sorting="true" />
-        <DxColumn data-field="status" caption="Status" :allow-filtering="true" :allow-sorting="true" />
-        <DxColumn data-field="motor" caption="Motor" :allow-filtering="true" :allow-sorting="true" />
-        <DxColumn data-field="lastModified" caption="Last Modified" :allow-filtering="true" :allow-sorting="true" data-type="date" format="yyyy-MM-dd"/>
+        <DxColumn data-field="customerId" :caption="t('customerId', 'Customer ID')" :allow-filtering="true" :allow-sorting="true" />
+        <DxColumn data-field="phoneNumber" :caption="t('phoneNumber', 'Phone Number')" :allow-filtering="true" :allow-sorting="true" />
+        <DxColumn data-field="customerName" :caption="t('customerName', 'Nama Customer')" :allow-filtering="true" :allow-sorting="true" />
+        <DxColumn data-field="personalNumber" :caption="t('personalNumber', 'Personal Number')" :allow-filtering="true" :allow-sorting="true" />
+        <DxColumn data-field="status" :caption="t('filterTabs.status', 'Status')" :allow-filtering="true" :allow-sorting="true" />
+        <DxColumn data-field="motor" :caption="t('motor', 'Motor')" :allow-filtering="true" :allow-sorting="true" />
+        <DxColumn data-field="lastModified" :caption="t('lastModified', 'Last Modified')" :allow-filtering="true" :allow-sorting="true" data-type="date" format="yyyy-MM-dd"/>
 
         <template #actionsTemplate="{ data }">
           <div class="flex gap-2">
@@ -251,7 +252,7 @@ const applyFilter = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Preview Booking</p>
+                <p>{{ t('previewBooking', 'Preview Booking') }}</p>
               </TooltipContent>
             </Tooltip>
 
@@ -262,7 +263,7 @@ const applyFilter = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Update Booking</p>
+                <p>{{ t('updateBooking', 'Update Booking') }}</p>
               </TooltipContent>
             </Tooltip>
 
@@ -273,7 +274,7 @@ const applyFilter = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Delete Booking</p>
+                <p>{{ t('deleteBooking', 'Delete Booking') }}</p>
               </TooltipContent>
             </Tooltip>
 
@@ -295,17 +296,17 @@ const applyFilter = () => {
   <AlertDialog :open="showDeleteDialog" @update:open="showDeleteDialog = $event">
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Konfirmasi</AlertDialogTitle>
+        <AlertDialogTitle>{{ t('confirmTitle', 'Konfirmasi') }}</AlertDialogTitle>
         <AlertDialogDescription>
-          Apakah Anda yakin akan melakukan pembatalan booking pada tanggal tersebut?
+          {{ t('confirmDesc', 'Apakah Anda yakin akan melakukan pembatalan booking pada tanggal tersebut?') }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>
-          <PhArrowLeft :size="16" /> Kembali
+          <PhArrowLeft :size="16" /> {{ t('back', 'Kembali') }}
         </AlertDialogCancel>
         <AlertDialogAction @click="handleConfirmDelete">
-          <PhCheckCircle :size="16" /> Ya, Yakin
+          <PhCheckCircle :size="16" /> {{ t('confirmYes', 'Ya, Yakin') }}
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

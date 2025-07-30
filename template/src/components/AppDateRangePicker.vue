@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { addDays, format } from 'date-fns';
 import { Calendar as CalendarIcon, X } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const isOpen = ref(false);
+const { t } = useI18n();
 
 const convertJSDateToRekaDate = (jsDate) => {
   if (!jsDate) return null;
@@ -37,9 +39,9 @@ const convertedModelValue = computed(() => {
   };
 });
 
-const presets = [
+const presets = computed(() => [
   {
-    name: "Today",
+    name: t('datePreset.today'),
     getValue: () => {
       const today = new Date();
       return {
@@ -49,7 +51,7 @@ const presets = [
     },
   },
   {
-    name: "Yesterday",
+    name: t('datePreset.yesterday'),
     getValue: () => {
       const yesterday = addDays(new Date(), -1);
       return {
@@ -59,7 +61,7 @@ const presets = [
     },
   },
   {
-    name: "Last 7 days",
+    name: t('datePreset.last7days'),
     getValue: () => {
       return {
         from: addDays(new Date(), -6),
@@ -68,7 +70,7 @@ const presets = [
     },
   },
   {
-    name: "Last 30 days",
+    name: t('datePreset.last30days'),
     getValue: () => {
       return {
         from: addDays(new Date(), -29),
@@ -77,7 +79,7 @@ const presets = [
     },
   },
   {
-    name: "This month",
+    name: t('datePreset.thisMonth'),
     getValue: () => {
       const today = new Date();
       return {
@@ -87,7 +89,7 @@ const presets = [
     },
   },
   {
-    name: "Last month",
+    name: t('datePreset.lastMonth'),
     getValue: () => {
       const today = new Date();
       return {
@@ -96,7 +98,7 @@ const presets = [
       };
     },
   },
-];
+]);
 
 const handleDateRangeChange = (range) => {
   emit('update:modelValue', range || { from: null, to: null });
@@ -155,11 +157,11 @@ const handleCalendarSelect = (range) => {
               @click="handleClear"
             >
               <X class="h-3 w-3" />
-              <span class="sr-only">Clear date range</span>
+              <span class="sr-only">{{ t('clearDateRange') }}</span>
             </Button>
           </template>
           <template v-else>
-            <span>Pick a date range</span>
+            <span>{{ t('pickDateRange') }}</span>
           </template>
         </Button>
       </PopoverTrigger>

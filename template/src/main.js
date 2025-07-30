@@ -1,21 +1,36 @@
-import './assets/main.css'
-import './assets/dx.material.custom-scheme.css'
+import "./assets/main.css";
+import "./assets/dx.material.custom-scheme.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-import App from './App.vue'
-import router from './router'
+import App from "./App.vue";
+import router from "./router";
 
-import config from 'devextreme/core/config'
+import config from "devextreme/core/config";
+import i18n from "./lib/i18n";
 config({
   licenseKey: import.meta.env.VITE_LICENSE_KEY_DEVEXTREME,
-  defaultCurrency: 'IDR',
-})
+  defaultCurrency: "IDR",
+});
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
+const savedLocale = localStorage.getItem("locale") || "id";
+if (!localStorage.getItem("locale")) {
+  localStorage.setItem("locale", savedLocale);
+}
 
-app.mount('#app')
+app.use(i18n);
+
+// Listen for locale changes from host app (module federation)
+window.addEventListener('storage', (event) => {
+  if (event.key === 'locale' && event.newValue) {
+    i18n.global.locale.value = event.newValue;
+  }
+});
+
+app.use(createPinia());
+app.use(router);
+
+app.mount("#app");

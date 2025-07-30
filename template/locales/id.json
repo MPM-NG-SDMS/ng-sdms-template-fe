@@ -1,0 +1,31 @@
+{
+  "listTitle": "Daftar Master Customer",
+  "createTitle": "Buat Master Customer",
+  "detailTitle": "Lihat Master Customer",
+  "editTitle": "Edit Master Customer",
+  "filterTabs": {
+    "all": "Semua",
+    "active": "Aktif",
+    "passive": "Pasif"
+  },
+  "filterDate": {
+    "7days": "7 Hari Terakhir",
+    "30days": "30 Hari Terakhir",
+    "90days": "90 Hari Terakhir"
+  },
+  "form": {
+    "nik": "NIK",
+    "noTelephone": "Nomor Telepon",
+    "namaDepan": "Nama Depan"
+  },
+  "datePreset": {
+    "today": "Hari Ini",
+    "yesterday": "Kemarin",
+    "last7days": "7 hari terakhir",
+    "last30days": "30 hari terakhir",
+    "thisMonth": "Bulan Ini",
+    "lastMonth": "Bulan Lalu"
+  },
+  "pickDateRange": "Pilih rentang tanggal",
+  "clearDateRange": "Bersihkan rentang tanggal"
+}

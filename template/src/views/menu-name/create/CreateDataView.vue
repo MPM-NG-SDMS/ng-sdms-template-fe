@@ -15,6 +15,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { z } from 'zod';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n';
 
 const formSchema = toTypedSchema(z.object({
   nik: z.string({
@@ -65,6 +66,7 @@ const formSchema = toTypedSchema(z.object({
   }),
 }))
 
+const { t } = useI18n();
 const form = useForm({
   schema: formSchema,
   keepValuesOnUnmount: true,
@@ -97,39 +99,39 @@ const openItems = ref(['data-customer'])
     <CardContent>
       <Accordion type="multiple" v-model="openItems">
         <AccordionItem value="data-customer">
-          <AccordionTrigger>Data Customer</AccordionTrigger>
+          <AccordionTrigger>{{ t('dataCustomer', 'Data Customer') }}</AccordionTrigger>
           <AccordionContent>
             <form class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
               <!-- Row 1 -->
               <FormField name="nik" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>NIK</RequiredFormLabel>
-                  <Input v-bind="componentField" placeholder="NIK" required />
+                  <RequiredFormLabel>{{ t('form.nik', 'NIK') }}</RequiredFormLabel>
+                  <Input v-bind="componentField" :placeholder="t('form.nik', 'NIK')" required />
                 </FormItem>
               </FormField>
               <FormField name="noTelephone" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>No Telephone</RequiredFormLabel>
-                  <Input v-bind="componentField" placeholder="No Telephone" required />
+                  <RequiredFormLabel>{{ t('form.noTelephone', 'No Telephone') }}</RequiredFormLabel>
+                  <Input v-bind="componentField" :placeholder="t('form.noTelephone', 'No Telephone')" required />
                 </FormItem>
               </FormField>
               <!-- Row 2 -->
               <FormField name="namaDepan" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>Nama Depan</RequiredFormLabel>
-                  <Input v-bind="componentField" placeholder="Nama Depan" required />
+                  <RequiredFormLabel>{{ t('form.namaDepan', 'Nama Depan') }}</RequiredFormLabel>
+                  <Input v-bind="componentField" :placeholder="t('form.namaDepan', 'Nama Depan')" required />
                 </FormItem>
               </FormField>
               <FormField name="namaBelakang" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>Nama Belakang</RequiredFormLabel>
-                  <Input v-bind="componentField" placeholder="Nama Belakang" required />
+                  <RequiredFormLabel>{{ t('form.namaBelakang', 'Nama Belakang') }}</RequiredFormLabel>
+                  <Input v-bind="componentField" :placeholder="t('form.namaBelakang', 'Nama Belakang')" required />
                 </FormItem>
               </FormField>
               <!-- Row 3 -->
               <FormField name="tanggalLahir" v-slot="{ field }">
                 <FormItem class="flex flex-col">
-                  <FormLabel>Tanggal Lahir</FormLabel>
+                  <FormLabel>{{ t('form.tanggalLahir', 'Tanggal Lahir') }}</FormLabel>
                   <div class="flex gap-2 w-full">
                     <Popover>
                       <PopoverTrigger as-child>
@@ -139,7 +141,7 @@ const openItems = ref(['data-customer'])
                             !field.value && 'text-muted-foreground',
                           )">
                             <span>
-                              {{ field.value ? df.format(toDate(field.value.toDate(getLocalTimeZone()))) : "Tanggal Lahir" }}
+                              {{ field.value ? df.format(toDate(field.value.toDate(getLocalTimeZone()))) : t('form.tanggalLahir', 'Tanggal Lahir') }}
                             </span>
                             <PhCalendarDots class="ms-auto opacity-50" />
                           </Button>
@@ -159,23 +161,23 @@ const openItems = ref(['data-customer'])
               </FormField>
               <FormField name="tempatLahir" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>Tempat Lahir</RequiredFormLabel>
-                  <Input v-bind="componentField" placeholder="Tempat Lahir" required />
+                  <RequiredFormLabel>{{ t('form.tempatLahir', 'Tempat Lahir') }}</RequiredFormLabel>
+                  <Input v-bind="componentField" :placeholder="t('form.tempatLahir', 'Tempat Lahir')" required />
                 </FormItem>
               </FormField>
               <!-- Row 4 -->
               <FormField name="agama" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>Agama</RequiredFormLabel>
+                  <RequiredFormLabel>{{ t('form.agama', 'Agama') }}</RequiredFormLabel>
                   <Select v-bind="componentField">
                     <SelectTrigger class="w-full">
-                      <SelectValue placeholder="Select..." />
+                      <SelectValue :placeholder="t('form.select', 'Select...')" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="islam">Islam</SelectItem>
-                      <SelectItem value="kristen">Kristen</SelectItem>
-                      <SelectItem value="hindu">Hindu</SelectItem>
-                      <SelectItem value="budha">Budha</SelectItem>
+                      <SelectItem value="islam">{{ t('form.islam', 'Islam') }}</SelectItem>
+                      <SelectItem value="kristen">{{ t('form.kristen', 'Kristen') }}</SelectItem>
+                      <SelectItem value="hindu">{{ t('form.hindu', 'Hindu') }}</SelectItem>
+                      <SelectItem value="budha">{{ t('form.budha', 'Budha') }}</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -183,30 +185,30 @@ const openItems = ref(['data-customer'])
               <!-- Row 5 -->
               <FormField name="jenisKelamin" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>Jenis Kelamin</RequiredFormLabel>
+                  <RequiredFormLabel>{{ t('form.jenisKelamin', 'Jenis Kelamin') }}</RequiredFormLabel>
                   <Select v-bind="componentField">
                     <SelectTrigger class="w-full">
-                      <SelectValue placeholder="Select..." />
+                      <SelectValue :placeholder="t('form.select', 'Select...')" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="laki">Laki-laki</SelectItem>
-                      <SelectItem value="perempuan">Perempuan</SelectItem>
+                      <SelectItem value="laki">{{ t('form.laki', 'Laki-laki') }}</SelectItem>
+                      <SelectItem value="perempuan">{{ t('form.perempuan', 'Perempuan') }}</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
               </FormField>
               <FormField name="pendidikan" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>Pendidikan</RequiredFormLabel>
+                  <RequiredFormLabel>{{ t('form.pendidikan', 'Pendidikan') }}</RequiredFormLabel>
                   <Select v-bind="componentField">
                     <SelectTrigger class="w-full">
-                      <SelectValue placeholder="Select..." />
+                      <SelectValue :placeholder="t('form.select', 'Select...')" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sd">SD</SelectItem>
-                      <SelectItem value="smp">SMP</SelectItem>
-                      <SelectItem value="sma">SMA</SelectItem>
-                      <SelectItem value="s1">S1</SelectItem>
+                      <SelectItem value="sd">{{ t('form.sd', 'SD') }}</SelectItem>
+                      <SelectItem value="smp">{{ t('form.smp', 'SMP') }}</SelectItem>
+                      <SelectItem value="sma">{{ t('form.sma', 'SMA') }}</SelectItem>
+                      <SelectItem value="s1">{{ t('form.s1', 'S1') }}</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -214,15 +216,15 @@ const openItems = ref(['data-customer'])
               <!-- Row 6 -->
               <FormField name="pekerjaan" v-slot="{ componentField }">
                 <FormItem>
-                  <RequiredFormLabel>Pekerjaan</RequiredFormLabel>
+                  <RequiredFormLabel>{{ t('form.pekerjaan', 'Pekerjaan') }}</RequiredFormLabel>
                   <Select v-bind="componentField">
                     <SelectTrigger class="w-full">
-                    <SelectValue placeholder="Select..." />
+                    <SelectValue :placeholder="t('form.select', 'Select...')" />
                   </SelectTrigger>
                   <SelectContent>
-                      <SelectItem value="swasta">Swasta</SelectItem>
-                      <SelectItem value="pns">PNS</SelectItem>
-                      <SelectItem value="wirausaha">Wirausaha</SelectItem>
+                      <SelectItem value="swasta">{{ t('form.swasta', 'Swasta') }}</SelectItem>
+                      <SelectItem value="pns">{{ t('form.pns', 'PNS') }}</SelectItem>
+                      <SelectItem value="wirausaha">{{ t('form.wirausaha', 'Wirausaha') }}</SelectItem>
                     </SelectContent>
                 </Select>
                 </FormItem>
@@ -231,27 +233,27 @@ const openItems = ref(['data-customer'])
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="informasi-kontak">
-          <AccordionTrigger>Informasi Kontak</AccordionTrigger>
+          <AccordionTrigger>{{ t('informasiKontak', 'Informasi Kontak') }}</AccordionTrigger>
           <AccordionContent>
             <!-- Add fields as needed -->
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="alamat">
-          <AccordionTrigger>Alamat</AccordionTrigger>
+          <AccordionTrigger>{{ t('alamat', 'Alamat') }}</AccordionTrigger>
           <AccordionContent>
             <!-- Add fields as needed -->
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="informasi-lainnya">
-          <AccordionTrigger>Informasi Lainnya</AccordionTrigger>
+          <AccordionTrigger>{{ t('informasiLainnya', 'Informasi Lainnya') }}</AccordionTrigger>
           <AccordionContent>
             <!-- Add fields as needed -->
           </AccordionContent>
         </AccordionItem>
       </Accordion>
       <div class="flex justify-end gap-2 mt-4">
-        <Button variant="secondary" @click="$router.back()"> <PhArrowLeft /> Kembali</Button>
-        <Button> <PhFloppyDisk /> Simpan</Button>
+        <Button variant="secondary" @click="$router.back()"> <PhArrowLeft /> {{ t('back', 'Kembali') }}</Button>
+        <Button> <PhFloppyDisk /> {{ t('save', 'Simpan') }}</Button>
       </div>
     </CardContent>
   </Card>

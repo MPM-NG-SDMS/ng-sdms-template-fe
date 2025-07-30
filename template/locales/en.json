@@ -1,0 +1,31 @@
+{
+  "listTitle": "Master Customer List",
+  "createTitle": "Create Master Customer",
+  "detailTitle": "View Master Customer",
+  "editTitle": "Edit Master Customer",
+  "filterTabs": {
+    "all": "All",
+    "active": "Active",
+    "passive": "Passive"
+  },
+  "filterDate": {
+    "7days": "Last 7 Days",
+    "30days": "Last 30 Days",
+    "90days": "Last 90 Days"
+  },
+  "form": {
+    "nik": "NIK",
+    "noTelephone": "Phone Number",
+    "namaDepan": "First Name"
+  },
+  "datePreset": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last7days": "Last 7 days",
+    "last30days": "Last 30 days",
+    "thisMonth": "This month",
+    "lastMonth": "Last month"
+  },
+  "pickDateRange": "Pick a date range",
+  "clearDateRange": "Clear date range"
+}

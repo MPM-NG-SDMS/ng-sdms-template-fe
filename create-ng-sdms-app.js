@@ -98,7 +98,8 @@ async function asyncCopyRecursive(src, dest, exclude = []) {
     if (!fs.existsSync(dest)) await fs.promises.mkdir(dest);
     const children = await fs.promises.readdir(src);
     for (const childItemName of children) {
-      if (!exclude.includes(childItemName)) {
+      // Always exclude node_modules
+      if (!exclude.includes(childItemName) && childItemName !== 'node_modules') {
         await asyncCopyRecursive(
           path.join(src, childItemName),
           path.join(dest, childItemName),

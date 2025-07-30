@@ -8,6 +8,7 @@ A modern, production-ready template for Vue 3 applications with Vite, Tailwind C
 - 🎨 [Tailwind CSS](https://tailwindcss.com/) with [DaisyUI](https://daisyui.com/)
 - 📦 [Pinia](https://pinia.vuejs.org/) for state management
 - 🚦 [Vue Router](https://router.vuejs.org/) for routing
+- 🌐 [vue-i18n](https://vue-i18n.intlify.dev/) for internationalization
 - 📝 [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) for code formatting
 - 🎯 [Zod](https://zod.dev/) for schema validation
 - 🔔 [Vue Sonner](https://vue-sonner.vercel.app/) for toast notifications
@@ -49,6 +50,28 @@ npm run dev
 ```bash
 npm build
 ```
+
+## Internationalization (i18n)
+
+This template uses [vue-i18n](https://vue-i18n.intlify.dev/) for internationalization.
+
+### Setup
+
+- Locale files are located in `src/locales/` (e.g., `en.json`, `id.json`).
+- The i18n configuration is in `src/lib/i18n.js`.
+- The current locale is set using `localStorage` and can be changed at runtime.
+
+### Usage
+
+- Use the `$t` function in your components to access translations:
+  ```vue
+  <template>
+    <h1>{{ $t('listTitle') }}</h1>
+  </template>
+  ```
+- To change the language, update `localStorage.setItem('locale', value)` and reload or use the provided watcher.
+
+For more details, see the [vue-i18n documentation](https://vue-i18n.intlify.dev/).
 
 ## Customization
 
