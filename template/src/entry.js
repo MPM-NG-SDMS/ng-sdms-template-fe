@@ -23,7 +23,7 @@ export const mount = (container) => {
     app = createApp(App);
 
     app.use(i18n);
-    
+
     const originalSetItem = localStorage.setItem;
     localStorage.setItem = function (key, value) {
       originalSetItem.apply(this, arguments);
@@ -37,13 +37,13 @@ export const mount = (container) => {
       );
     };
 
-    window.addEventListener("storage", (event) => {
-      console.log("Storage event detected:", event);
-
+    // Store the handler so it can be removed later
+    window._storageEventHandler = function (event) {
       if (event.key === "locale" && event.newValue) {
         i18n.global.locale.value = event.newValue;
       }
-    });
+    };
+    window.addEventListener("storage", window._storageEventHandler);
 
     // Use Pinia and Router
     app.use(createPinia());
@@ -60,8 +60,11 @@ export const mount = (container) => {
 export const unmount = () => {
   if (app != null) {
     app.unmount();
-    window.removeEventListener("storage");
-
+    // Remove the storage event handler
+    if (window._storageEventHandler) {
+      window.removeEventListener("storage", window._storageEventHandler);
+      delete window._storageEventHandler;
+    }
     app = null;
   } else {
     console.warn("App is not mounted.");
