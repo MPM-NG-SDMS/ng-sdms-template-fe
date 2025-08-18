@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getToken } from './authHelper'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_URL_API
 
@@ -13,13 +14,10 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem('token')
-    const idinternal = sessionStorage.getItem('idinternal')
-    const username = sessionStorage.getItem('username')
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`,
-      config.headers['idinternal'] = idinternal
-      config.headers['username'] = username
+    // retrieve token and user info from Keycloak storage
+    const rawToken = getToken()
+    if (rawToken) {
+      config.headers['Authorization'] = `Bearer ${rawToken}`
     }
 
     return config

@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { addDays, format } from 'date-fns';
 import { Calendar as CalendarIcon, X } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -8,11 +7,16 @@ import { RangeCalendar } from '@/components/ui/range-calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { parseDate } from '@internationalized/date';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: {
     type: Object,
     default: () => ({ from: null, to: null })
+  },
+  showClearButton: {
+    type: Boolean,
+    default: true,
   }
 });
 
@@ -41,7 +45,7 @@ const convertedModelValue = computed(() => {
 
 const presets = computed(() => [
   {
-    name: t('datePreset.today'),
+    name: t('customer.datePreset.today'),
     getValue: () => {
       const today = new Date();
       return {
@@ -51,7 +55,7 @@ const presets = computed(() => [
     },
   },
   {
-    name: t('datePreset.yesterday'),
+    name: t('customer.datePreset.yesterday'),
     getValue: () => {
       const yesterday = addDays(new Date(), -1);
       return {
@@ -61,7 +65,7 @@ const presets = computed(() => [
     },
   },
   {
-    name: t('datePreset.last7days'),
+    name: t('customer.datePreset.last7days'),
     getValue: () => {
       return {
         from: addDays(new Date(), -6),
@@ -70,7 +74,7 @@ const presets = computed(() => [
     },
   },
   {
-    name: t('datePreset.last30days'),
+    name: t('customer.datePreset.last30days'),
     getValue: () => {
       return {
         from: addDays(new Date(), -29),
@@ -79,7 +83,7 @@ const presets = computed(() => [
     },
   },
   {
-    name: t('datePreset.thisMonth'),
+    name: t('customer.datePreset.thisMonth'),
     getValue: () => {
       const today = new Date();
       return {
@@ -89,7 +93,7 @@ const presets = computed(() => [
     },
   },
   {
-    name: t('datePreset.lastMonth'),
+    name: t('customer.datePreset.lastMonth'),
     getValue: () => {
       const today = new Date();
       return {
@@ -151,17 +155,19 @@ const handleCalendarSelect = (range) => {
               </template>
             </span>
             <Button
+              v-if="showClearButton"
+              type="button"
               variant="ghost"
               size="icon"
               class="h-5 w-5 rounded-full"
               @click="handleClear"
             >
               <X class="h-3 w-3" />
-              <span class="sr-only">{{ t('clearDateRange') }}</span>
+              <span class="sr-only">{{ t('customer.clearDateRange') }}</span>
             </Button>
           </template>
           <template v-else>
-            <span>{{ t('pickDateRange') }}</span>
+            <span>{{ t('customer.pickDateRange') }}</span>
           </template>
         </Button>
       </PopoverTrigger>
