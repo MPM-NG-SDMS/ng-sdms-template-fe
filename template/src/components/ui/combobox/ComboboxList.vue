@@ -2,6 +2,7 @@
 import { cn } from '@/lib/utils';
 import { reactiveOmit } from '@vueuse/core';
 import { ComboboxContent, ComboboxPortal, useForwardPropsEmits } from 'reka-ui';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
@@ -37,10 +38,16 @@ const emits = defineEmits([
 
 const delegatedProps = reactiveOmit(props, 'class', 'viewportClass');
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const shadowRootRef = ref(null)
+
+onMounted(() => {
+  shadowRootRef.value = window.__shadowRoot ?? null
+})
 </script>
 
 <template>
-  <ComboboxPortal>
+  <ComboboxPortal :to="shadowRootRef">
     <ComboboxContent
       data-slot="combobox-list"
       v-bind="forwarded"

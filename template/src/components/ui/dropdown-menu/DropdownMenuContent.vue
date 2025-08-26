@@ -5,7 +5,7 @@ import {
   DropdownMenuPortal,
   useForwardPropsEmits,
 } from 'reka-ui';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
@@ -44,10 +44,16 @@ const delegatedProps = computed(() => {
 });
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const shadowRootRef = ref(null)
+
+onMounted(() => {
+  shadowRootRef.value = window.__shadowRoot ?? null
+})
 </script>
 
 <template>
-  <DropdownMenuPortal>
+  <DropdownMenuPortal :to="shadowRootRef">
     <DropdownMenuContent
       data-slot="dropdown-menu-content"
       v-bind="forwarded"

@@ -9,6 +9,8 @@ import {
   useForwardPropsEmits,
 } from 'reka-ui';
 import SheetOverlay from './SheetOverlay.vue';
+import { ref } from 'vue';
+import { onMounted } from 'vue';
 
 defineOptions({
   inheritAttrs: false,
@@ -35,10 +37,16 @@ const emits = defineEmits([
 const delegatedProps = reactiveOmit(props, 'class', 'side');
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const shadowRootRef = ref(null)
+
+onMounted(() => {
+  shadowRootRef.value = window.__shadowRoot ?? null
+})
 </script>
 
 <template>
-  <DialogPortal>
+  <DialogPortal :to="shadowRootRef">
     <SheetOverlay />
     <DialogContent
       data-slot="sheet-content"

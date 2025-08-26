@@ -50,6 +50,7 @@ export default defineConfig(({ mode }) => {
       target: 'esnext',
       outDir: 'dist',
       assetsDir: 'assets',
+      cssCodeSplit: true,
       rollupOptions: {
         output: {
           manualChunks: undefined

@@ -6,7 +6,7 @@ import {
   SelectViewport,
   useForwardPropsEmits,
 } from 'reka-ui';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { SelectScrollDownButton, SelectScrollUpButton } from '.';
 
 defineOptions({
@@ -49,10 +49,16 @@ const delegatedProps = computed(() => {
 });
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const shadowRootRef = ref(null)
+
+onMounted(() => {
+  shadowRootRef.value = window.__shadowRoot ?? null
+})
 </script>
 
 <template>
-  <SelectPortal>
+  <SelectPortal :to="shadowRootRef">
     <SelectContent
       data-slot="select-content"
       v-bind="{ ...forwarded, ...$attrs }"

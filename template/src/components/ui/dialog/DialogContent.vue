@@ -9,6 +9,8 @@ import {
 } from 'reka-ui';
 import { computed } from 'vue';
 import DialogOverlay from './DialogOverlay.vue';
+import { ref } from 'vue';
+import { onMounted } from 'vue';
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
@@ -34,10 +36,17 @@ const delegatedProps = computed(() => {
 });
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const shadowRootRef = ref(null)
+
+onMounted(() => {
+  shadowRootRef.value = window.__shadowRoot ?? null
+})
+
 </script>
 
 <template>
-  <DialogPortal>
+  <DialogPortal :to="shadowRootRef">
     <DialogOverlay />
     <DialogContent
       data-slot="dialog-content"

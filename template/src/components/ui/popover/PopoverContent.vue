@@ -1,7 +1,7 @@
 <script setup>
 import { cn } from '@/lib/utils';
 import { PopoverContent, PopoverPortal, useForwardPropsEmits } from 'reka-ui';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 defineOptions({
   inheritAttrs: false,
@@ -45,10 +45,16 @@ const delegatedProps = computed(() => {
 });
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const shadowRootRef = ref(null)
+
+onMounted(() => {
+  shadowRootRef.value = window.__shadowRoot ?? null
+})
 </script>
 
 <template>
-  <PopoverPortal>
+  <PopoverPortal :to="shadowRootRef">
     <PopoverContent
       data-slot="popover-content"
       v-bind="{ ...forwarded, ...$attrs }"
