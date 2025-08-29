@@ -2,7 +2,6 @@
 import { cn } from '@/lib/utils';
 import { reactiveOmit } from '@vueuse/core';
 import { ComboboxContent, ComboboxPortal, useForwardPropsEmits } from 'reka-ui';
-import { onMounted, ref } from 'vue';
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
@@ -26,6 +25,8 @@ const props = defineProps({
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
   disableOutsidePointerEvents: { type: Boolean, required: false },
+  // When false, render inline instead of portaling/teleporting
+  usePortal: { type: Boolean, required: false, default: true },
   class: { type: null, required: false },
   viewportClass: { type: null, required: false },
 });
@@ -39,15 +40,26 @@ const emits = defineEmits([
 const delegatedProps = reactiveOmit(props, 'class', 'viewportClass');
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
-const shadowRootRef = ref(null)
-
-onMounted(() => {
-  shadowRootRef.value = window.__shadowRoot ?? null
-})
 </script>
 
 <template>
-  <ComboboxPortal :to="shadowRootRef">
+  <template v-if="props.usePortal">
+    <ComboboxPortal>
+      <ComboboxContent
+        data-slot="combobox-list"
+        v-bind="forwarded"
+        :class="
+          cn(
+            'z-50 w-[200px] rounded-md border bg-popover text-popover-foreground origin-(--reka-combobox-content-transform-origin) overflow-hidden shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+            props.class,
+          )
+        "
+      >
+        <slot />
+      </ComboboxContent>
+    </ComboboxPortal>
+  </template>
+  <template v-else>
     <ComboboxContent
       data-slot="combobox-list"
       v-bind="forwarded"
@@ -60,5 +72,5 @@ onMounted(() => {
     >
       <slot />
     </ComboboxContent>
-  </ComboboxPortal>
+  </template>
 </template>

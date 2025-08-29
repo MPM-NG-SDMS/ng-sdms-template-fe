@@ -21,17 +21,21 @@ const props = defineProps({
   containerAriaLabel: { type: String, required: false },
   pauseWhenPageIsHidden: { type: Boolean, required: false },
   cn: { type: Function, required: false },
+  // Teleport target for Shadow DOM compatibility
+  teleportTo: { type: [String, Object], required: false },
 });
 </script>
 
 <template>
-  <Sonner
-    class="toaster group"
-    v-bind="props"
-    :style="{
-      '--normal-bg': 'var(--popover)',
-      '--normal-text': 'var(--popover-foreground)',
-      '--normal-border': 'var(--border)',
-    }"
-  />
+  <teleport :to="props.teleportTo || 'body'">
+    <Sonner
+      class="toaster group"
+      v-bind="props"
+      :style="{
+        '--normal-bg': 'var(--popover)',
+        '--normal-text': 'var(--popover-foreground)',
+        '--normal-border': 'var(--border)',
+      }"
+    />
+  </teleport>
 </template>

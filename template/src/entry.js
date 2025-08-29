@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 import i18n from './lib/i18n'
 
+// CSS will be injected into document.head instead of shadow DOM
 import tailwindCss from './assets/main.css?url'
 import dxCss from './assets/dx.material.custom-scheme.css?url'
 
@@ -21,7 +22,36 @@ config({
 })
 
 const getStoredTheme = () => {
-  return localStorage.getItem('theme') || 'mpm' // default theme
+  return localStorage.getItem('theme') || 'mpm' // default themeshadowRoot
+}
+
+// Inject CSS into document head and track for removal
+function injectStylesIntoHead() {
+  const urls = [dxCss, tailwindCss].filter(Boolean)
+
+  urls.forEach((href) => {
+    let realHref = href;
+
+    if (import.meta.env.MODE === 'development') {
+      realHref = new URL(href, new URL(import.meta.url).origin).href
+    }
+
+    // Check if already exists to avoid duplicates
+    const existing = document.head.querySelector(
+      `link[rel="stylesheet"][data-ng-sdms-style="true"][href="${realHref}"]`
+    )
+    if (existing) {
+      return
+    }
+
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = realHref
+    link.setAttribute('data-ng-sdms-style', 'true')
+    link.crossOrigin = 'anonymous'
+
+    document.head.appendChild(link)
+  })
 }
 
 export const mount = (container) => {
@@ -50,9 +80,13 @@ export const mount = (container) => {
     }
 
     link.crossOrigin = 'anonymous' // matches Vite’s build output
+
     shadowRoot.appendChild(link)
     styleTags.push(link)
   })
+
+
+  injectStylesIntoHead()
 
   // --- Mount Vue app into shadow root (wait for CSS to load first) ---
   const mountPoint = document.createElement('div')
@@ -93,7 +127,7 @@ export const mount = (container) => {
     // If the stylesheet is already available, resolve immediately
     try {
       if (link.sheet) return resolve()
-    } catch (e) {
+    } catch {
       // Accessing link.sheet can throw in some browsers for cross-origin; ignore
     }
     const onEnd = () => {
@@ -121,13 +155,32 @@ export const mount = (container) => {
 }
 
 export const unmount = () => {
+  console.log("Unmounting Vue app");
+
   if (app != null) {
     app.unmount()
     app = null
   }
 
+  // Remove injected CSS from document head by attribute
+  try {
+    const headLinks = document.head.querySelectorAll('link[rel="stylesheet"][data-ng-sdms-style="true"]')
+
+    console.log("Removing injected CSS:", headLinks);
+
+    headLinks.forEach((lnk) => lnk.remove())
+  } catch {
+    // ignore removal errors
+  }
+
   // Remove CSS links
-  styleTags.forEach((tag) => tag.remove())
+  styleTags.forEach((tag) => {
+    try {
+      tag.remove()
+    } catch {
+      // ignore removal errors
+    }
+  })
   styleTags = []
 
   // Remove event listener

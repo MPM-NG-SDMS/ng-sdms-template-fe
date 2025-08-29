@@ -5,7 +5,7 @@ import {
   DropdownMenuPortal,
   useForwardPropsEmits,
 } from 'reka-ui';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
@@ -27,6 +27,8 @@ const props = defineProps({
   reference: { type: null, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
+  // When false, render inline instead of using a Portal/Teleport
+  usePortal: { type: Boolean, required: false, default: true },
   class: { type: null, required: false },
 });
 const emits = defineEmits([
@@ -45,15 +47,26 @@ const delegatedProps = computed(() => {
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
-const shadowRootRef = ref(null)
-
-onMounted(() => {
-  shadowRootRef.value = window.__shadowRoot ?? null
-})
 </script>
 
 <template>
-  <DropdownMenuPortal :to="shadowRootRef">
+  <template v-if="props.usePortal">
+    <DropdownMenuPortal>
+      <DropdownMenuContent
+        data-slot="dropdown-menu-content"
+        v-bind="forwarded"
+        :class="
+          cn(
+            'bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 max-h-(--reka-dropdown-menu-content-available-height) min-w-[8rem] origin-(--reka-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md',
+            props.class,
+          )
+        "
+      >
+        <slot />
+      </DropdownMenuContent>
+    </DropdownMenuPortal>
+  </template>
+  <template v-else>
     <DropdownMenuContent
       data-slot="dropdown-menu-content"
       v-bind="forwarded"
@@ -66,5 +79,5 @@ onMounted(() => {
     >
       <slot />
     </DropdownMenuContent>
-  </DropdownMenuPortal>
+  </template>
 </template>
